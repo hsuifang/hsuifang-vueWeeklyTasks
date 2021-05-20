@@ -1,0 +1,39 @@
+---
+title: Product
+layout: ./app/layout/layout.ejs
+engine: ejs
+page: product
+---
+
+<section class="container pt-4 pb-4 pt-lg-7 pb-lg-7">
+  <h2 class="title font-raleway fsz-5 fsz-md-6 mb-4 text-dark">後台</h2>
+  <div class="card">
+    <div class="card-body">
+      <table class="table caption-top">
+        <caption>
+          產品清單
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">產品名稱</th>
+            <th scope="col">原價</th>
+            <th scope="col">售價</th>
+            <th scope="col">是否啟用</th>
+            <th scope="col">刪除</th>
+          </tr>
+        </thead>
+        <tbody id="js-serverProductList">
+          <tr>
+            <td class="text-center text-muted" colspan="5">
+              <img
+                width="100"
+                src="https://media.giphy.com/media/wnYB3vx9t6PXiq1ubB/giphy.gif"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p>目前有 <span id="js-productCount">0</span> 項產品</p>
+    </div>
+  </div>
+</section>

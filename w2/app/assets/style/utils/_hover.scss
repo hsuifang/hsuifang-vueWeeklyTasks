@@ -1,0 +1,22 @@
+// zoom
+.hv-zoom {
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 0.5s ease;
+  }
+}
+
+// hover - bg color
+@each $key, $var in $theme-colors {
+  .hv-text-#{$key} {
+    &:hover {
+      color: $var;
+    }
+  }
+  .hv-bg-#{$key} {
+    &:hover {
+      background: $var;
+    }
+  }
+}

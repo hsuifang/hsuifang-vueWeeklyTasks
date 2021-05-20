@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%- title %></title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/style/all.css" />
+  </head>
+
+  <body>
+    <header class="navbar navbar-expand-sm navbar-light bg-secondary shadow-sm sticky-top">
+      <nav class="container">
+        <a class="navbar-brand" href="#">
+          <img src="/assets/img/logo.svg" alt="logo" width="40">
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto" id="js-navbar"></ul>
+        </div>
+      </nav>
+    </header>
+    <main><%- contents %></main>
+    <footer class="container py-3">
+      <p class="text-center">
+        © 2021. All Rights Reserved.
+      </p>
+    </footer>
+    <!-- Modal -->
+    <div class="modal fade" id="js-loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form id="js-loginForm">
+              <h3 class="text-center text-primary">登入</h3>
+              <div class="mb-3">
+                <label for="js-loginEmail" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="js-loginEmail" aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <div class="mb-3">
+                <label for="js-loginPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="js-loginPassword" required>
+              </div>
+              <button type="submit" class="btn btn-primary text-white">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/vendors.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
