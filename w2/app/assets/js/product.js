@@ -86,8 +86,8 @@ const app = {
     const view = products.reduce((acc, item) => {
       return `${acc}
           <tr><td>${item.title}</td>
-          <td>${item.unit} ${item.origin_price}</td>
-          <td>${item.unit} ${item.price}</td>
+          <td>${item.origin_price}</td>
+          <td>${item.price}</td>
           <td><span class="${
             item.is_enabled ? 'text-success' : 'text-secondary'
           }">${item.is_enabled ? '啟用' : '未啟用'}</span></td>
@@ -118,9 +118,11 @@ const app = {
 
 try {
   const path = window.location.pathname
-  if (path === '/index.html' || path === '/') {
+  const isClient = path.includes('/index.html')
+  const isAdmin = path.includes('/product.html')
+  if (isClient) {
     app.created('client')
-  } else if (path === '/product.html') {
+  } else if (isAdmin) {
     if (!!JWT.getToken()) {
       app.created('admin')
     } else {
@@ -130,5 +132,6 @@ try {
     throw new Error('invalid')
   }
 } catch (error) {
+  console.log(error)
   location.assign('index.html')
 }

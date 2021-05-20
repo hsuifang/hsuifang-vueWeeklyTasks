@@ -3,8 +3,9 @@ const $ = require('gulp-load-plugins')({ lazy: false });
 const autoprefixer = require('autoprefixer');
 const minimist = require('minimist');
 const browserSync = require('browser-sync').create();
-const { envOptions } = require('./envOptions');
 const webpack = require('webpack-stream');
+const uglify = require('gulp-uglify');
+const { envOptions } = require('./envOptions');
 
 let options = minimist(process.argv.slice(2), envOptions);
 //現在開發狀態
@@ -65,6 +66,7 @@ function babel() {
   }))
   .pipe($.concat(envOptions.javascript.concat))
   .pipe($.sourcemaps.write('.'))
+  .pipe(uglify())
   .pipe(gulp.dest(envOptions.javascript.path))
   .pipe(
     browserSync.reload({

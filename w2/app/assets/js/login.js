@@ -40,6 +40,7 @@ const app = {
         JWT.removeToken()
         this.data.isAuthenticated = false
         this.render()
+        location.assign('index.html')
       }
     } catch (error) {
       console.dir(error)
