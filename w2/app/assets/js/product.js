@@ -1,5 +1,5 @@
 import { apiGetProducts, apiDeleteProductItem } from './api/index.js'
-import { JWT } from './api/localStorage.js'
+import { JWT } from './api/cookies.js'
 const app = {
   data: {
     privilege: null,
@@ -107,7 +107,6 @@ const app = {
         this.deleteProductItem(item)
       })
     })
-
     productCount.textContent = this.data.products.length
   },
   created(privilege) {

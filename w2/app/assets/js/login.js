@@ -1,4 +1,4 @@
-import { JWT } from './api/localStorage.js'
+import { JWT } from './api/cookies.js'
 import { apiSignIn, apiLogout } from './api/index.js'
 
 const domElement = {
@@ -28,6 +28,8 @@ const app = {
         this.data.isAuthenticated = true
         this.render()
         domElement.loginModal.hide()
+      } else {
+        alert('登入失敗')
       }
     } catch (error) {
       console.dir(error)

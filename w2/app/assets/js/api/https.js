@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { JWT } from './localStorage.js'
+import { JWT } from './cookies.js'
 
 const apiInfo = {
   url: 'https://vue3-course-api.hexschool.io/',
