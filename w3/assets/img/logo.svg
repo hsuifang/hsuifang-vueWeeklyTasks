@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-285.000000, -94.000000)">
+            <g id="Group" transform="translate(294.000000, 114.000000)">
+                <path d="M50.5,-5.55728053 L85.4878212,49 L15.5121788,49 L50.5,-5.55728053 Z" id="Triangle" stroke="#F39696" stroke-width="6" fill="#FFFFFF" stroke-linejoin="round"></path>
+                <polygon id="Triangle" stroke="#F39696" stroke-width="6" fill="#F39696" stroke-linejoin="round" transform="translate(29.500000, 46.000000) scale(1, -1) translate(-29.500000, -46.000000) " points="29.5 23 59 69 0 69"></polygon>
+                <polygon id="Triangle" stroke="#FFFFFF" stroke-width="5" fill="#FFFFFF" stroke-linejoin="round" transform="translate(27.500000, 42.000000) scale(1, -1) translate(-27.500000, -42.000000) " points="27.5 28 47 56 8 56"></polygon>
+                <text id="ifang" font-family="SignPainter-HouseScriptSemibold, SignPainter" font-size="12" font-style="condensed" font-weight="500" letter-spacing="0.24" fill="#F39696">
+                    <tspan x="47.144" y="64">ifang</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
