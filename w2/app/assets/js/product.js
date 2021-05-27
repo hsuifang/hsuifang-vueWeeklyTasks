@@ -50,7 +50,7 @@ const app = {
     const { uiSelector, products } = this.data
     const el = document.querySelector(uiSelector.clientProductList)
     const view = products.reduce((acc, item) => {
-      return item.is_enabled === 1
+      return item.is_enabled
         ? `${acc}
         <li class="col-12 col-sm-6 col-md-3 mb-3">
         <div class="card">
