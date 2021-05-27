@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap');
+*, *:after, *:before {
+  position: relative;
+  box-sizing: border-box;
+  transition: all 0.1s ease;
+}
+
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+body {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0;
+}
+
+a,
+p,
+legend {
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  &:hover{
+    text-decoration: none;
+  }
+}
+
+ul,
+li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+img{
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+}
+
