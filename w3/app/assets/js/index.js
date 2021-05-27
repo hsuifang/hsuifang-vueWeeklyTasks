@@ -142,7 +142,7 @@ const App = {
       this.currentProductItem = this.generateItemForm()
       const idx = this.products.findIndex((item) => item.id === id)
       if (idx !== -1) {
-        this.currentProductItem = this.products[idx]
+        this.currentProductItem = { ...this.products[idx] }
       }
     },
     handleProductItem(id = '') {
