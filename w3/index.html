@@ -90,7 +90,7 @@
                       class="form-check-input"
                       type="checkbox"
                       :checked="item.is_enabled"
-                      @change="toggleProductItemStatus(item.id)"
+                      @change="toggleProductItemStatus(item)"
                     />
                   </div>
                 </td>
@@ -99,7 +99,7 @@
                     type="button"
                     class="btn btn-sm btn-outline-primary me-1"
                     data-action="remove"
-                    @click="handleProductItem(item.id)"
+                    @click="handleProductItem(item)"
                   >
                     編輯
                   </button>
@@ -107,7 +107,7 @@
                     type="button"
                     class="btn btn-sm btn-outline-danger"
                     data-action="remove"
-                    @click="deleteProductItem(item.id)"
+                    @click="deleteProductItem({id: item.id, title: item.title})"
                   >
                     刪除
                   </button>
@@ -228,13 +228,14 @@
       </div>
       <!-- 圖片 -->
       <div class="col-md-12">
-        <label class="form-label">主要圖片</label>
+        <label class="form-label" for="imageUrl">主要圖片</label>
         <img
           :src="currentProductItem.imageUrl"
           alt=""
           v-if="currentProductItem.imageUrl"
         />
         <input
+          id="imageUrl"
           type="text"
           class="form-control"
           v-model.trim="currentProductItem.imageUrl"
@@ -245,19 +246,14 @@
         v-for="(img, idx) in currentProductItem.imagesUrl"
         :key="`img${idx}`"
       >
-        <label class="form-label">縮圖{{idx + 1}}</label>
+        <label :for="`thumbnail${idx}`" class="form-label">縮圖{{idx + 1}}</label>
         <img v-if="img" :src="img" alt="暫時無圖片" />
-        <input type="text" class="form-control" v-model.trim="img" />
+        <input :id="`thumbnail${idx}`" type="text" class="form-control" v-model.trim="currentProductItem.imagesUrl[idx]" />
       </div>
       <div class="col-12">
         <button type="submit" class="btn btn-primary text-white">
           新增/編輯
         </button>
-        <!-- <button class="btn btn-primary" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          <span class="visually-hidden">Loading...</span>
-        </button> 
-        -->
       </div>
     </form>
   </div>
@@ -277,8 +273,7 @@
                 <h3 class="text-center">登入</h3>
                 <div class="mb-3">
                   <label for="js-loginEmail" class="form-label">帳號</label>
-                  <input type="email" class="form-control" v-model.trim="login.username" aria-describedby="emailHelp" required>
-                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  <input id="js-loginEmail" type="email" class="form-control" v-model.trim="login.username" aria-describedby="emailHelp" required>
                 </div>
                 <div class="mb-3">
                   <label for="js-loginPassword" class="form-label">密碼</label>
