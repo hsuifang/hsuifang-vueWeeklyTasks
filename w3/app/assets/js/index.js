@@ -5,6 +5,7 @@ import {
   apiDeleteProductItem,
   apiSignIn,
   apiLogout,
+  apiCheckUserStatus
 } from './api/index.js'
 import { JWT } from './api/cookies.js'
 
@@ -49,13 +50,15 @@ const App = {
       try {
         this.isLoading = true
         const res = await apiGetAdminProducts(page)
-        const { products, pagination, success } = res.data
+        const { products, pagination, success, message } = res.data
         if (success) {
           this.products = products.map((item) => ({
             ...item,
             is_enabled: Boolean(item.is_enabled),
           }))
           this.pageInfo = pagination
+        } else {
+          alert(message)
         }
       } catch (error) {
         console.log(error)
@@ -88,15 +91,15 @@ const App = {
         console.log(error)
       }
     },
-    async toggleProductItemStatus(id) {
+    async toggleProductItemStatus(item) {
       this.isLoading = true
-      this.generateProductItem(id)
+      this.currentProductItem = item
       this.currentProductItem.is_enabled = !this.currentProductItem.is_enabled
       await this.submitProductItem()
       this.isLoading = false
     },
-    async deleteProductItem(id) {
-      if (window.confirm('你確定要刪除嗎？')) {
+    async deleteProductItem({id, title}) {
+      if (window.confirm(`你確定要刪除-${title}嗎？`)) {
         this.isLoading = true
         try {
           const res = await apiDeleteProductItem(id)
@@ -138,26 +141,29 @@ const App = {
         console.dir(error)
       }
     },
-    generateProductItem(id = '') {
-      this.currentProductItem = this.generateItemForm()
-      const idx = this.products.findIndex((item) => item.id === id)
-      if (idx !== -1) {
-        this.currentProductItem = { ...this.products[idx] }
-      }
-    },
-    handleProductItem(id = '') {
-      this.generateProductItem(id)
-      this.bsOffcanvas.toggle()
+    handleProductItem(item) {
+      this.currentProductItem = item
+      this.bsOffcanvas.show()
     },
     toggleModal() {
       this.bsModal.toggle()
     },
-    init() {
-      this.currentProductItem = this.generateItemForm()
-      if (JWT.getToken()) {
-        this.fetchProductData()
+    async init() {
+      try {
+        this.currentProductItem = this.generateItemForm()
+        const res = await apiCheckUserStatus()
+        const {success, message} = res.data
+        if (success) {
+          this.fetchProductData()
+        } else if (!success) {
+          alert(message)
+          JWT.removeToken()
+          this.isAuthenticated = false
+        }
+      } catch (error) {
+        console.log(error) 
       }
-    },
+    }
   },
   mounted() {
     // 登入

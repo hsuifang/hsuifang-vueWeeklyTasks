@@ -9,6 +9,10 @@ export const apiLogout = () => {
   return req('post', `/logout`)
 }
 
+export const apiCheckUserStatus = () => {
+  return req('post', '/api/user/check')
+}
+
 export const apiGetProducts = (page) => {
   return req('get', `/api/${apiPath}/products?page=${page}`)
 }
