@@ -1,0 +1,14 @@
+.font-raleway {
+  // 大標題
+  line-height: 1.5;
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-family: 'Raleway';
+}
+
+.title {
+  padding-left: 0.9rem;
+  font-size: 1.4rem;
+  border-left: 8px solid $primary;
+  font-family: 'Raleway';
+}

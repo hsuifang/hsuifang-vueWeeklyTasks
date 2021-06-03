@@ -1,0 +1,112 @@
+---
+title: Product
+layout: ./app/layout/layout.ejs
+engine: ejs
+page: product
+---
+
+<section class="container pt-4 pb-4 pt-lg-7 pb-lg-7">
+  <h1 class="title font-raleway fsz-5 fsz-md-6 mb-4 text-dark">後台</h1>
+  <div class="card">
+    <div class="card-body">
+      <h3 v-if="!isAuthenticated">請先登入</h3>
+      <!-- create Btn -->
+      <template  v-else>
+        <div class="d-flex justify-content-md-between pr-3 mb-4">
+          <h2 class="h6 text-secondary">產品清單</h2>
+          <button
+            class="btn btn-outline-secondary rounded-pill shadow-sm text-primary"
+            type="button"
+            aria-controls="modifyProductItem"
+            @click="handleProductItem(null)"
+          >
+            建立新的產品
+          </button>
+        </div>
+        <table class="table caption-top">
+          <thead>
+            <tr>
+              <th scope="col">產品名稱</th>
+              <th scope="col">評價</th>
+              <th scope="col">原價</th>
+              <th scope="col">售價</th>
+              <th scope="col">是否啟用</th>
+              <th scope="col">刪除</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="isLoading">
+              <td class="text-center text-muted" colspan="5">
+                <img
+                  width="100"
+                  src="https://media.giphy.com/media/wnYB3vx9t6PXiq1ubB/giphy.gif"
+                />
+              </td>
+            </tr>
+            <template v-else>
+              <tr v-for="item in products" :key="item.id">
+                <td>{{item.title}}</td>
+                <td>{{item.rate || '-'}}</td>
+                <td>$ {{item.origin_price}}</td>
+                <td>$ {{item.price}}</td>
+                <td>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      :checked="item.is_enabled"
+                      @change="toggleProductItemStatus(item)"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-primary me-1"
+                    data-action="remove"
+                    @click="handleProductItem(item)"
+                  >
+                    編輯
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    data-action="remove"
+                    @click="deleteProductItem({id: item.id, title: item.title})"
+                  >
+                    刪除
+                  </button>
+                </td>
+              </tr>
+              <!-- no data -->
+              <tr
+                v-if="products.length === 0"
+                class="text-center text-muted"
+                colspan="5">
+                  <td class="text-center text-muted" colspan="5">無商品 / ㄏ</td>
+                </tr>
+              </td>
+            </template>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-md-between">
+          <p>目前有 <span>{{products.length}}</span> 項產品</p>
+          <page :page-info="pageInfo" @change-page="changePage"></page>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<product-canvasoff
+  :ref="refName.productCanvasoff"
+  :product-item="currentProductItem"
+  @submit-product-item="updateProductItem"
+>
+</product-canvasoff>
+
+<the-login
+  :ref="refName.loginModal"
+  @handle-login-success="handleLoginSuccess"
+>
+</the-login>
