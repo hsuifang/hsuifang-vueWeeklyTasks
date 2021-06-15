@@ -226,7 +226,7 @@ const app = Vue.createApp({
         const { success, message } = res.data
         if (success) {
           this.fetchCartList()
-          tthis.$refs.form.resetForm()
+          this.$refs.form.resetForm()
         } else {
           alert(message)
         }
