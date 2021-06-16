@@ -63,6 +63,7 @@
                     <input
                       type="text"
                       placeholder="購買數量"
+                      min="1"
                       aria-describedby="button-addon3"
                       class="form-control border-0"
                       v-model.number="requestQty"

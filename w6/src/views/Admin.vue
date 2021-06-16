@@ -28,24 +28,28 @@ export default {
     };
   },
   methods: {
-    checkLogin() {
+    async checkLogin() {
       emitter.emit('v-loading', { isLoading: true });
       const token = JWT.getToken();
       if (token) {
-        apiCheckUser(token).then((res) => {
+        try {
+          const res = await apiCheckUser(token);
           const { success } = res.data;
           if (success) {
             this.isAuthenticated = true;
             this.$router.push('/admin/products');
-            emitter.emit('v-loading', { isLoading: false });
           } else {
             this.$router.push('/login');
           }
-        });
+        } catch (error) {
+          console.log(error);
+        } finally {
+          emitter.emit('v-loading', { isLoading: false });
+        }
       } else {
         this.$router.push('/login');
+        emitter.emit('v-loading', { isLoading: false });
       }
-      emitter.emit('v-loading', { isLoading: false });
     },
     // logout
     async handleLogout() {

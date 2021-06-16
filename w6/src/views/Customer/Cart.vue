@@ -73,6 +73,7 @@
                         class="form-control"
                         v-model.number="item.qty"
                         style="width: 80px"
+                        min="1"
                         @change="
                           updateCart({
                             cartId: item.id,
@@ -134,7 +135,7 @@
             <div class="mb-3">
               <label for="name" class="form-label">姓名</label>
               <v-field
-                id="email"
+                id="name"
                 name="姓名"
                 type="email"
                 class="form-control"
@@ -313,6 +314,7 @@ export default {
         const { success, message } = res.data;
         if (success) {
           this.carts = [];
+          this.fetchCartList();
         } else {
           this.showMsg({ msg: message, status: 'danger' });
         }
@@ -329,14 +331,15 @@ export default {
         });
         const { success, message } = res.data;
         if (success) {
-          this.fetchCartList();
-          this.$refs.form.resetForm();
+          await this.fetchCartList();
+          await this.$refs.form.resetForm();
         } else {
           this.showMsg({ msg: message, status: 'danger' });
         }
-        this.toggleLoding({ pos: '' });
       } catch (error) {
         console.log(error);
+      } finally {
+        this.toggleLoding({ pos: '' });
       }
     },
     toggleLoding({ pos, id }) {
