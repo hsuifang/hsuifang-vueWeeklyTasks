@@ -1,0 +1,33 @@
+*,
+*:after,
+*:before {
+  position: relative;
+  box-sizing: border-box;
+  transition: all 0.1s ease;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+body {
+  background: #eecda3;
+  background: -webkit-linear-gradient(177deg, #ffefdb, #ffbbb9);
+  background: linear-gradient(177deg, #ffefdb, #ffbbb9);
+  min-height: 100vh;
+  letter-spacing: 1px;
+}
+
+img {
+  max-width: 100%;
+}
+
+p {
+  margin-bottom: 0;
+}
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
