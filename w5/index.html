@@ -130,7 +130,7 @@
                         </th>
                         <td class="align-middle"><strong>NT$ {{item.product.price}}</strong></td>
                         <td class="align-middle">
-                          <input type="number" class="form-control" v-model.number="item.qty" style="width: 80px" @change="updateCart({cartId: item.id, productId: item.product_id, qty: item.qty })"/>
+                          <input type="number" class="form-control" min="1" v-model.number="item.qty" style="width: 80px" @change="updateCart({cartId: item.id, productId: item.product_id, qty: item.qty })"/>
                         </td>
                         <td class="align-middle">
                             <button type="button"
@@ -177,7 +177,7 @@
               <v-form ref="form" v-slot="{ errors }" @submit="requestOrder" class="px-3">
                 <div class="mb-3">
                   <label for="name" class="form-label">姓名</label>
-                  <v-field id="email" name="姓名" type="email" class="form-control"
+                  <v-field id="name" name="姓名" type="email" class="form-control"
                     :class="{ 'is-invalid': errors['姓名'] }" placeholder="請輸入姓名" rules="required"
                     v-model="form.user.name"></v-field>
                   <error-message name="姓名" class="invalid-feedback"></error-message>
@@ -288,7 +288,7 @@
                     <p class="fw-bold ps-1 mb-2">剩下 {{productDetail.num}} {{productDetail.unit}}</p>
                     <div class="input-group mb-2">
                       <div class="input-group mb-4 border rounded-pill p-2">
-                        <input type="text" placeholder="購買數兩" aria-describedby="button-addon3" class="form-control border-0"  v-model.number="requestQty">
+                        <input type="text" placeholder="購買數量" aria-describedby="button-addon3" class="form-control border-0" min="1" v-model.number="requestQty">
                         <div class="input-group-append border-0">
                           <button
                             type="button"

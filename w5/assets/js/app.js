@@ -208,6 +208,7 @@ const app = Vue.createApp({
         const { success, message } = res.data
         if (success) {
           this.carts = []
+          this.fetchCartList()
         } else {
           alert(message)
         }
