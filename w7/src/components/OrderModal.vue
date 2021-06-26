@@ -5,6 +5,7 @@
     tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
+    data-bs-backdrop="static"
     aria-hidden="true"
     ref="modal"
   >
@@ -19,6 +20,7 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            @click="$emit('clearItem')"
           ></button>
         </div>
         <div class="modal-body px-5 py-4">
@@ -134,6 +136,7 @@ export default {
     },
   },
   mixins: [modalMixin],
+  emits: ['clearItem'],
   data() {
     return {
       tempOrder: {},
@@ -141,7 +144,7 @@ export default {
   },
   watch: {
     orderInfo() {
-      this.tempOrder = this.orderInfo;
+      this.tempOrder = { ...this.orderInfo };
     },
   },
 };

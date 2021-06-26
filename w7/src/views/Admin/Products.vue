@@ -79,6 +79,7 @@
       ref="productModal"
       :productItem="currentProductItem"
       @submitProductItem="updateProductItem"
+      @clearItem="initGenerateForm"
     />
   </div>
 </template>
@@ -132,7 +133,7 @@ export default {
       try {
         this.$vLoading(true);
         const res = await apiGetAdminProducts(page);
-        const { products, pagination, success, message } = res.data;
+        const { products, pagination, success } = res.data;
         if (success) {
           this.products = products.map((item) => ({
             ...item,
@@ -140,7 +141,7 @@ export default {
           }));
           this.pageInfo = pagination;
         } else {
-          alert(message);
+          this.$vHttpsNotice(res, '產品資料');
         }
       } catch (error) {
         console.log(error);
@@ -175,7 +176,7 @@ export default {
         const res = isNew
           ? await apiCreateProduct({ data: content })
           : await apiUpdateProduct({ id: productId, data: { data: content } });
-        const { success, message } = res.data;
+        const { success } = res.data;
         if (success) {
           this.$refs.productModal.closeModal();
           if (productId) {
@@ -186,10 +187,11 @@ export default {
           } else {
             this.fetchProductData();
           }
+          // this.currentProductItem = this.generateItemForm();
         }
-        alert(message);
+        this.$vHttpsNotice(res, '產品調整');
       } catch (error) {
-        console.log(error);
+        this.$vErrorNotice();
       } finally {
         this.$vLoading(false);
       }
@@ -212,8 +214,11 @@ export default {
     changePage(page) {
       this.fetchProductData(page);
     },
-    init() {
+    initGenerateForm() {
       this.currentProductItem = this.generateItemForm();
+    },
+    init() {
+      this.initGenerateForm();
       this.fetchProductData();
     },
   },

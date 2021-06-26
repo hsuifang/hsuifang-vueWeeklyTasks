@@ -91,7 +91,12 @@
         </div>
       </div>
     </div>
-    <OrderModal ref="orderModal" :orderInfo="currentItem" @updateOrder="submitOrderItem" />
+    <OrderModal
+      ref="orderModal"
+      :orderInfo="currentItem"
+      @updateOrder="submitOrderItem"
+      @clearItem="currentItem = {}"
+    />
   </div>
 </template>
 <script>

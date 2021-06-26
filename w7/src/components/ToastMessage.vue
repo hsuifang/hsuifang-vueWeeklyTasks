@@ -1,6 +1,6 @@
 <template>
   <!-- show -->
-  <div class="position-absolute top-0 end-0" style="z-index: 1000">
+  <div class="position-fixed top-0 end-0" style="z-index: 1000">
     <div
       class="toast show"
       role="alert"
@@ -12,7 +12,7 @@
       <div class="toast-header">
         <span class="bg-primary p-2 rounded me-2 d-inline-block"></span>
         <strong class="me-auto">{{ msg.title }}</strong>
-        <button type="button" class="btn-close" aria-label="Close" @click="clear(key)"></button>
+        <button type="button" class="btn-close" aria-label="Close" @click="clearMsg(idx)"></button>
       </div>
       <div class="toast-body" v-if="msg.content">
         {{ msg.content }}
@@ -41,7 +41,6 @@ export default {
   inject: ['emitter'],
   mounted() {
     this.emitter.on('notice-message', (message) => {
-      console.log(message);
       const { style = 'success', title, content } = message;
       this.messages.push({ style, title, content });
       this.showMsg();

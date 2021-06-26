@@ -7,6 +7,7 @@
     role="dialog"
     aria-labelledby="couponModal"
     aria-hidden="true"
+    data-bs-backdrop="static"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -20,6 +21,7 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            @click="$emit('clearItem')"
           ></button>
         </div>
         <div class="modal-body">
@@ -107,7 +109,7 @@ export default {
       type: Object,
     },
   },
-  emits: ['updateCoupon'],
+  emits: ['updateCoupon', 'clearItem'],
   components: {
     DatePicker,
   },
@@ -121,7 +123,7 @@ export default {
   },
   watch: {
     couponDetail(val) {
-      this.couponInfo = val;
+      this.couponInfo = { ...val };
       const date = this.couponInfo.due_date;
       this.dueDate = date ? new Date(date) : new Date();
     },

@@ -15,6 +15,10 @@ export default {
     },
   },
   mounted() {
-    this.modal = new Modal(this.$refs.modal);
+    this.modal = new Modal(this.$refs.modal, {
+      keyboard: false,
+      backdrop: false,
+    });
+    // this.modal.on('hidden.bs.modal', this.doSomethingOnHidden);
   },
 };

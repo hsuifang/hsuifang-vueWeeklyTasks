@@ -44,7 +44,7 @@
                       type="checkbox"
                       :true-value="1"
                       :false-value="0"
-                      v-model="currentItem.is_enabled"
+                      v-model="item.is_enabled"
                       @change="toggleCouponItemStatus(item)"
                     />
                   </div>
@@ -88,6 +88,7 @@
       :isCreate="isCreateItem"
       :couponDetail="currentItem"
       @updateCoupon="submitCouponItem"
+      @clearItem="currentItem = {}"
     />
   </div>
 </template>
@@ -144,6 +145,7 @@ export default {
       }
     },
     async toggleCouponItemStatus(item) {
+      console.log(item);
       this.isLoading = true;
       this.currentItem = item;
       this.currentItem.is_enabled = this.currentItem.is_enabled ? 1 : 0;
@@ -174,7 +176,7 @@ export default {
         const res = this.isCreateItem
           ? await apiCreateCoupon({ data: content })
           : await apiUpdateCoupon({ id: couponId, data: { data: content } });
-        const { success, message } = res.data;
+        const { success } = res.data;
         if (success) {
           this.$refs.couponModal.closeModal();
           if (couponId) {
@@ -186,7 +188,7 @@ export default {
             this.fetchCoupons();
           }
         }
-        alert(message);
+        this.$vHttpsNotice(res, `${this.isCreateItem ? '新增' : '調整'}優惠券調整`);
       } catch (error) {
         this.$vErrorNotice();
       }

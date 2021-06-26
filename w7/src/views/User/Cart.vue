@@ -54,9 +54,15 @@
                         />
                         <div class="ml-3 d-inline-block align-middle">
                           <h5 class="mb-0 text-dark">{{ item.product.title }}</h5>
-                          <span class="text-muted font-weight-normal font-italic"
-                            >類別: {{ item.product.category }}</span
-                          >
+                          <p class="text-muted font-weight-normal font-italic mb-2">
+                            類別: {{ item.product.category }}
+                          </p>
+                          <div v-if="item.coupon" class="text-muted fs-8">
+                            優惠券:
+                            <span class="bg-primary text-white rounded-pill py-1 px-2 fs-8">
+                              {{ item.coupon.code }}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </th>
@@ -119,6 +125,15 @@
                 class="form-control border-0"
                 v-model="couponCode"
               />
+              <div
+                v-if="loadingItem.pos === 'applyCoupon'"
+                class="position-absolute top-50 start-100"
+                style="transform: translateX(-10px)"
+              >
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
               <div class="input-group-append border-0">
                 <button
                   id="button-addon3"
@@ -132,9 +147,7 @@
             </div>
           </div>
           <h6 class="bg-light rounded-pill px-4 py-3 fw-bold text-secondary">金額明細</h6>
-          <span class="mx-3 mt-2 bg-primary text-white rounded d-inline-block p-2" v-if="usedCode">
-            使用優惠碼:{{ usedCode }}
-          </span>
+
           <div class="pt-0 p-4">
             <ul class="list-unstyled mb-4">
               <li class="d-flex justify-content-between py-3 border-bottom">
@@ -223,7 +236,7 @@
             <div class="text-end">
               <button
                 type="submit"
-                class="btn btn-secondary rounded-pill py-2 px-4"
+                class="btn btn-secondary rounded-pill py-2 px-4 text-white"
                 :disabled="loadingItem.pos === 'requestOrder' || this.carts.length === 0"
               >
                 購買確認
@@ -278,6 +291,7 @@ export default {
       },
       couponCode: '',
       usedCode: '',
+      coupons: [],
     };
   },
   methods: {
@@ -350,6 +364,7 @@ export default {
         });
         const { success } = res.data;
         if (success) {
+          this.$vHttpsNotice(res, '送出訂單');
           this.$router.push('/');
           // await this.fetchCartList();
           // await this.$refs.form.resetForm(); // 記得要清data資料
@@ -363,18 +378,18 @@ export default {
       }
     },
     async applyCoupn() {
+      this.toggleLoding({ pos: 'applyCoupon' });
       try {
         const res = await apiApplyCoupon(this.couponCode);
-        const { success } = res.data;
-        if (success) {
+        if (res.data.success) {
           this.usedCode = this.couponCode;
-          this.couponCode = '';
-          this.$vHttpsNotice(res, '使用優惠券');
-        } else {
-          this.$vHttpsNotice(res, '使用優惠券');
         }
+        this.couponCode = '';
+        this.$vHttpsNotice(res, '使用優惠券');
       } catch (error) {
         this.$vErrorNotice();
+      } finally {
+        this.toggleLoding({ pos: '' });
       }
     },
     toggleLoding({ pos, id }) {

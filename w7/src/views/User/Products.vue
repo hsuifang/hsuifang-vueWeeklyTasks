@@ -5,8 +5,8 @@
       <template v-if="products.length > 0">
         <div class="col-12 col-md-5 col-lg-4" v-for="item in products" :key="item.id">
           <div class="card mb-2 shadow-sm">
-            <div class="card-img-top">
-              <img :src="item.imageUrl" alt="主要圖片" />
+            <div class="card-img-top bg-primary">
+              <img v-if="item.imageUrl" :src="item.imageUrl" alt="主要圖片" />
             </div>
             <div class="card-body">
               <h2 class="h6 card-title mb-1">{{ item.title }}</h2>

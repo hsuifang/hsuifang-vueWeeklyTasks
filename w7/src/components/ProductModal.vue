@@ -9,6 +9,8 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            data-bs-backdrop="static"
+            @click="$emit('clearItem')"
           ></button>
         </div>
         <div class="modal-body">
@@ -225,6 +227,7 @@ export default {
   },
   mixins: [modalMixin],
   inject: ['emitter'],
+  emits: ['clearItem', 'submitProductItem'],
   data() {
     return {
       fileUploading: false,
@@ -233,14 +236,20 @@ export default {
       productModal: '',
       images: [],
       inputImage: '',
-      mainImgId: 'currentImg0',
+      mainImgId: '',
     };
   },
   methods: {
     // 新增及編輯
     submitProductItem() {
       const productId = this.currentProductItem.id;
-      this.currentProductItem.imageUrl = this.images.find((item) => item.id === this.mainImgId).url;
+      try {
+        this.currentProductItem.imageUrl = this.images.find(
+          (item) => item.id === this.mainImgId,
+        ).url;
+      } catch (error) {
+        this.currentProductItem.imageUrl = '';
+      }
       this.currentProductItem.imagesUrl = this.images
         .filter((item) => item.id !== this.mainImgId)
         .map((item) => item.url);
@@ -250,6 +259,9 @@ export default {
       });
     },
     deleteImg(idx) {
+      if (this.images[idx].id === this.mainImgId) {
+        this.mainImgId = '';
+      }
       this.images.splice(idx, 1);
     },
     async uploadFile() {
@@ -258,7 +270,10 @@ export default {
       const { size, lastModified } = uploadFile;
       const limitMaxSize = 1024 * 1024;
       if (size >= limitMaxSize) {
-        alert('檔案大小不得超過1GB');
+        this.emitter.emit('notice-message', {
+          style: 'danger',
+          title: '檔案大小不得超過1GB',
+        });
       } else {
         try {
           const formData = new FormData();
@@ -269,12 +284,18 @@ export default {
           this.$refs.fileInput.value = '';
           this.fileUploading = false;
           if (success) {
-            alert('上傳成功');
+            this.emitter.emit('notice-message', {
+              style: 'success',
+              title: '上傳成功',
+            });
           } else {
-            alert('失敗');
+            this.emitter.emit('notice-message', {
+              style: 'danger',
+              title: '上傳失敗',
+            });
           }
         } catch (e) {
-          // this.$vHttpsNotice({ data: { success: true, message: '122' } });
+          this.$vErrorNotice();
         }
       }
     },
@@ -287,10 +308,13 @@ export default {
   watch: {
     productItem(val) {
       this.currentProductItem = { ...val };
-      const mainImages = this.currentProductItem.imageUrl
-        ? [{ id: 'currentImg0', url: this.currentProductItem.imageUrl }]
-        : [];
-      const restImages = this.currentProductItem.imagesUrl
+      // 主要圖片
+      const { imageUrl, imagesUrl } = this.currentProductItem;
+      const mainImages = imageUrl ? [{ id: 'currentImg0', url: imageUrl }] : [];
+      if (imageUrl) this.mainImgId = 'currentImg0';
+      // 其他圖片處理
+      const images = imagesUrl || [];
+      const restImages = images
         .filter((item) => Boolean(item))
         .map((img, idx) => ({ id: `currentImg${idx + 1}`, url: img }));
       this.images = [...mainImages, ...restImages];
