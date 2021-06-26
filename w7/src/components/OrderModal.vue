@@ -136,7 +136,7 @@ export default {
     },
   },
   mixins: [modalMixin],
-  emits: ['clearItem'],
+  emits: ['updateOrder', 'clearItem'],
   data() {
     return {
       tempOrder: {},
