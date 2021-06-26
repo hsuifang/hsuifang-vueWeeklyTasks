@@ -1,0 +1,321 @@
+<template>
+  <div ref="modal" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">產品資訊</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="submitProductItem" class="row g-4">
+            <div class="col-md-7">
+              <div class="row">
+                <div class="col-md-12">
+                  <ul class="list-unstyled d-flex mb-2">
+                    <li role="uploadType" class="me-3">
+                      <input
+                        type="radio"
+                        :value="1"
+                        name="uploadType"
+                        id="uploadImage"
+                        class="me-1"
+                        v-model="uploadType"
+                        :disabled="images.length >= 6"
+                      />
+                      <label for="uploadImage">上傳圖片</label>
+                    </li>
+                    <li class="nav-item" role="uploadType">
+                      <input
+                        type="radio"
+                        :value="2"
+                        name="uploadType"
+                        id="inputImage"
+                        class="me-1"
+                        v-model="uploadType"
+                      />
+                      <label for="inputImage">輸入圖片路徑</label>
+                    </li>
+                  </ul>
+                  <div v-if="uploadType === 1">
+                    <input
+                      type="file"
+                      id="customFile"
+                      class="form-control mb-2"
+                      ref="fileInput"
+                      accept="image/*"
+                      @change="uploadFile"
+                    />
+                    <div class="position-absolute bottom-0 end-0">
+                      <i class="fas fa-spinner fa-spin" v-if="fileUploading"></i>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3" v-if="uploadType === 2">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="圖片路徑"
+                      aria-label="圖片路徑"
+                      aria-describedby="updateTempImage"
+                      v-model="inputImage"
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      @click="updateTempImage"
+                    >
+                      新增圖片
+                    </button>
+                  </div>
+                </div>
+                <template v-if="images.length > 0">
+                  <div class="col-md-4" v-for="(img, idx) in images" :key="`img${idx}`">
+                    <div class="shadow-sm mb-3">
+                      <div class="p-2">
+                        <div class="productImg rounded">
+                          <img class="rounded-start w-100 h-100" :src="img.url" />
+                        </div>
+                        <input
+                          :id="`mainImages${idx}`"
+                          type="radio"
+                          name="images"
+                          class="me-1"
+                          :value="img.id"
+                          v-model="mainImgId"
+                        />
+                        <label :for="`mainImages${idx}`">主要圖片</label>
+                        <div class="position-absolute top-0 end-0">
+                          <button
+                            class="btn rounded-circle shadow-sm"
+                            type="button"
+                            @click="deleteImg(idx)"
+                          >
+                            🗑
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="row align-items-end">
+                <div class="mb-3">
+                  <label for="title" class="form-label">產品名稱</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    v-model="currentProductItem.title"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label for="description" class="form-label">描述</label>
+                  <textarea
+                    class="form-control"
+                    id="description"
+                    placeholder="描述"
+                    row="5"
+                    v-model="currentProductItem.description"
+                  ></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="content" class="form-label">內容</label>
+                  <textarea
+                    class="form-control"
+                    id="content"
+                    placeholder="內容"
+                    row="5"
+                    v-model="currentProductItem.content"
+                  ></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="originPrice" class="form-label">原價</label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    id="originPrice"
+                    v-model.number="currentProductItem.origin_price"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="price" class="form-label">售價</label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    id="price"
+                    v-model.number="currentProductItem.price"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="category" class="form-label">類別</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="category"
+                    v-model="currentProductItem.category"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="unit" class="form-label">單位</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="unit"
+                    v-model="currentProductItem.unit"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="isEnabled"
+                      v-model="currentProductItem.is_enabled"
+                    />
+                    <label class="form-check-label" for="isEnabled"> 啟用 </label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="rate" class="form-label">評價 - {{ currentProductItem.rate }}</label>
+                  <input
+                    type="range"
+                    class="form-range w-100"
+                    min="0"
+                    max="5"
+                    step="0.5"
+                    id="rate"
+                    v-model="currentProductItem.rate"
+                  />
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary text-white w-100 rounded-pill">
+                    新增/編輯
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import modalMixin from '@/mixins/modalMixin';
+import { apiUploadImg } from '@/api';
+
+export default {
+  props: {
+    isCreate: {
+      type: Boolean,
+    },
+    productItem: {
+      type: Object,
+    },
+  },
+  mixins: [modalMixin],
+  inject: ['emitter'],
+  data() {
+    return {
+      fileUploading: false,
+      uploadType: 1,
+      currentProductItem: null,
+      productModal: '',
+      images: [],
+      inputImage: '',
+      mainImgId: 'currentImg0',
+    };
+  },
+  methods: {
+    // 新增及編輯
+    submitProductItem() {
+      const productId = this.currentProductItem.id;
+      this.currentProductItem.imageUrl = this.images.find((item) => item.id === this.mainImgId).url;
+      this.currentProductItem.imagesUrl = this.images
+        .filter((item) => item.id !== this.mainImgId)
+        .map((item) => item.url);
+      this.$emit('submitProductItem', {
+        isNew: !productId,
+        content: this.currentProductItem,
+      });
+    },
+    deleteImg(idx) {
+      this.images.splice(idx, 1);
+    },
+    async uploadFile() {
+      this.fileUploading = true;
+      const uploadFile = this.$refs.fileInput.files[0];
+      const { size, lastModified } = uploadFile;
+      const limitMaxSize = 1024 * 1024;
+      if (size >= limitMaxSize) {
+        alert('檔案大小不得超過1GB');
+      } else {
+        try {
+          const formData = new FormData();
+          formData.append('file-to-upload', uploadFile);
+          const res = await apiUploadImg(formData);
+          const { imageUrl, success } = res.data;
+          this.images.push({ id: `new${lastModified}`, url: imageUrl });
+          this.$refs.fileInput.value = '';
+          this.fileUploading = false;
+          if (success) {
+            alert('上傳成功');
+          } else {
+            alert('失敗');
+          }
+        } catch (e) {
+          // this.$vHttpsNotice({ data: { success: true, message: '122' } });
+        }
+      }
+    },
+    updateTempImage() {
+      const id = `new${new Date().getTime()}`;
+      this.images.push({ id, url: this.inputImage });
+      this.inputImage = '';
+    },
+  },
+  watch: {
+    productItem(val) {
+      this.currentProductItem = { ...val };
+      const mainImages = this.currentProductItem.imageUrl
+        ? [{ id: 'currentImg0', url: this.currentProductItem.imageUrl }]
+        : [];
+      const restImages = this.currentProductItem.imagesUrl
+        .filter((item) => Boolean(item))
+        .map((img, idx) => ({ id: `currentImg${idx + 1}`, url: img }));
+      this.images = [...mainImages, ...restImages];
+    },
+  },
+  created() {
+    this.currentProductItem = { ...this.productItem };
+  },
+};
+</script>
+
+<style lang="scss">
+.productImg {
+  width: 100%;
+  padding-bottom: 70%;
+  img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%; /* This if for the object-fit */
+    height: 100%; /* This if for the object-fit */
+    object-fit: contain; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+  }
+}
+</style>
