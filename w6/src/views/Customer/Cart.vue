@@ -147,9 +147,9 @@
               <error-message name="姓名" class="invalid-feedback"></error-message>
             </div>
             <div class="mb-3">
-              <label for="name" class="form-label">Email</label>
+              <label for="email" class="form-label">Email</label>
               <v-field
-                id="name"
+                id="email"
                 name="Email"
                 type="email"
                 class="form-control"
@@ -331,8 +331,9 @@ export default {
         });
         const { success, message } = res.data;
         if (success) {
-          await this.fetchCartList();
-          await this.$refs.form.resetForm();
+          this.$router.push('/');
+          // await this.fetchCartList();
+          // await this.$refs.form.resetForm(); // 記得要清data資料
         } else {
           this.showMsg({ msg: message, status: 'danger' });
         }
